@@ -36,5 +36,7 @@ using Test
   end
   println('\n')
 
+  @test length(String(km)) > 10_000
+
   finalize(km)
 end;
