@@ -9,12 +9,14 @@ Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 xkbcommon_jll = "d8fb68d0-12a3-5cfd-a85a-d49703b185fd"
 
 [compat]
+BitMasks = "0.1"
+Reexport = "1"
 julia = "1.8"
 xkbcommon_jll = "1"
-Reexport = "1"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+Xorg_libxcb_jll = "c7cfdc94-dc32-55de-ac96-5a1b8d977c5b"
 
 [targets]
-test = ["Test"]
+test = ["Test", "Xorg_libxcb_jll"]

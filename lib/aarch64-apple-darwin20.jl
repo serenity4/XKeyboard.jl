@@ -68,7 +68,7 @@ Flags for keymap compilation.
 | :---------------------------------- | :----------------------- |
 | XKB\\_KEYMAP\\_COMPILE\\_NO\\_FLAGS | Do not apply any flags.  |
 """
-@enum xkb_keymap_compile_flags::UInt32 begin
+@bitmask xkb_keymap_compile_flags::UInt32 begin
     XKB_KEYMAP_COMPILE_NO_FLAGS = 0
 end
 
@@ -640,7 +640,7 @@ Flags for [`xkb_keysym_from_name`](@ref)().
 | XKB\\_KEYSYM\\_NO\\_FLAGS         | Do not apply any flags.                  |
 | XKB\\_KEYSYM\\_CASE\\_INSENSITIVE | Find keysym by case-insensitive search.  |
 """
-@enum xkb_keysym_flags::UInt32 begin
+@bitmask xkb_keysym_flags::UInt32 begin
     XKB_KEYSYM_NO_FLAGS = 0
     XKB_KEYSYM_CASE_INSENSITIVE = 1
 end
@@ -759,7 +759,7 @@ Flags for context creation.
 | XKB\\_CONTEXT\\_NO\\_DEFAULT\\_INCLUDES  | Create this context with an empty include path.              |
 | XKB\\_CONTEXT\\_NO\\_ENVIRONMENT\\_NAMES | Don't take RMLVO names from the environment.  \\since 0.3.0  |
 """
-@enum xkb_context_flags::UInt32 begin
+@bitmask xkb_context_flags::UInt32 begin
     XKB_CONTEXT_NO_FLAGS = 0
     XKB_CONTEXT_NO_DEFAULT_INCLUDES = 1
     XKB_CONTEXT_NO_ENVIRONMENT_NAMES = 2
@@ -1603,19 +1603,19 @@ Flags for the [`xkb_x11_setup_xkb_extension`](@ref)() function.
 end
 
 function xkb_x11_setup_xkb_extension(connection, major_xkb_version, minor_xkb_version, flags, major_xkb_version_out, minor_xkb_version_out, base_event_out, base_error_out)
-    ccall((:xkb_x11_setup_xkb_extension, libxkbcommon - x11), Cint, (Ptr{Cint}, UInt16, UInt16, xkb_x11_setup_xkb_extension_flags, Ptr{UInt16}, Ptr{UInt16}, Ptr{UInt8}, Ptr{UInt8}), connection, major_xkb_version, minor_xkb_version, flags, major_xkb_version_out, minor_xkb_version_out, base_event_out, base_error_out)
+    ccall((:xkb_x11_setup_xkb_extension, libxkbcommon_x11), Cint, (Ptr{Cint}, UInt16, UInt16, xkb_x11_setup_xkb_extension_flags, Ptr{UInt16}, Ptr{UInt16}, Ptr{UInt8}, Ptr{UInt8}), connection, major_xkb_version, minor_xkb_version, flags, major_xkb_version_out, minor_xkb_version_out, base_event_out, base_error_out)
 end
 
 function xkb_x11_get_core_keyboard_device_id(connection)
-    ccall((:xkb_x11_get_core_keyboard_device_id, libxkbcommon - x11), Int32, (Ptr{Cint},), connection)
+    ccall((:xkb_x11_get_core_keyboard_device_id, libxkbcommon_x11), Int32, (Ptr{Cint},), connection)
 end
 
 function xkb_x11_keymap_new_from_device(context, connection, device_id, flags)
-    ccall((:xkb_x11_keymap_new_from_device, libxkbcommon - x11), Ptr{xkb_keymap}, (Ptr{xkb_context}, Ptr{Cint}, Int32, xkb_keymap_compile_flags), context, connection, device_id, flags)
+    ccall((:xkb_x11_keymap_new_from_device, libxkbcommon_x11), Ptr{xkb_keymap}, (Ptr{xkb_context}, Ptr{Cint}, Int32, xkb_keymap_compile_flags), context, connection, device_id, flags)
 end
 
 function xkb_x11_state_new_from_device(keymap, connection, device_id)
-    ccall((:xkb_x11_state_new_from_device, libxkbcommon - x11), Ptr{xkb_state}, (Ptr{xkb_keymap}, Ptr{Cint}, Int32), keymap, connection, device_id)
+    ccall((:xkb_x11_state_new_from_device, libxkbcommon_x11), Ptr{xkb_state}, (Ptr{xkb_keymap}, Ptr{Cint}, Int32), keymap, connection, device_id)
 end
 
 const XKB_MOD_NAME_SHIFT = "Shift"
