@@ -1,5 +1,8 @@
 module XKeyboard
 
-# Write your package code here.
+using Reexport
+
+include("LibXKB.jl")
+@reexport using .LibXKB
 
 end
