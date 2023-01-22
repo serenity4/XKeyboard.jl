@@ -42,10 +42,12 @@ function keymap_from_x11(conn; setup_xkb = true)
 end
 
 """
+    String(keymap::Keymap)
+
 Return a complete string representation of a [`Keymap`](@ref).
 
 !!! tip
-    The output is very large and may be better to redirect to a file than to print directly on a console.
+    The returned string is very large. You might prefer to redirect to a file than printing directly on a console.
 """
 function Base.String(km::Keymap)
   km_name_ptr = xkb_keymap_get_as_string(km, XKB_KEYMAP_FORMAT_TEXT_V1)
@@ -61,7 +63,7 @@ struct PhysicalKey
 end
 
 """
-    String(keymap, key::PhysicalKey)
+    String(keymap::Keymap, key::PhysicalKey)
 
 Obtain the string representation of a physical key.
 """
@@ -72,11 +74,11 @@ function Base.String(km::Keymap, key::PhysicalKey)
 end
 
 """
-    Symbol(keymap, key::PhysicalKey)
+    Symbol(keymap::Keymap, key::PhysicalKey)
 
 Obtain the name of a physical key.
 
-`String(keymap, key::PhysicalKey)` can be used instead if you aim to consume a `String` instead of a `Symbol`.
+`String(keymap::Keymap, key::PhysicalKey)` can be used instead if you aim to consume a `String` instead of a `Symbol`.
 """
 Base.Symbol(km::Keymap, key::PhysicalKey) = Symbol(String(km, key))
 
@@ -87,7 +89,7 @@ function PhysicalKey(km::Keymap, name::AbstractString)
 end
 
 """
-    PhysicalKey(keymap, name::Symbol)
+    PhysicalKey(keymap::Keymap, name::Symbol)
 
 Obtain a [`PhysicalKey`](@ref) from its string representation `name` using a keymap.
 
@@ -127,7 +129,7 @@ Keysym(str::AbstractString) = Keysym(xkb_keysym_from_name(str, XKB_KEYSYM_NO_FLA
 Keysym(name::Symbol) = Keysym(string(name))
 
 """
-    String(keysym; max_chars = 50)
+    String(keysym::Keysym; max_chars = 50)
 
 Return a `String` representation of a [`Keysym`](@ref) with at most `max_chars` characters.
 
@@ -148,7 +150,7 @@ end
 Base.Symbol(keysym::Keysym; max_chars = 50) = Symbol(String(keysym; max_chars))
 
 """
-    Char(keymap, key::PhysicalKey)
+    Char(keymap::Keymap, key::PhysicalKey)
 
 Retrieve a UTF-8 character which corresponds to the printable input associated with the keysym obtained via the provided `keycode` and the `keymap` state.
 
