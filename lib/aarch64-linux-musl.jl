@@ -100,7 +100,7 @@ A keymap compiled according to the RMLVO names, or NULL if the compilation faile
 [`xkb_rule_names`](@ref) xkb_keymap
 """
 function xkb_keymap_new_from_names(context, names, flags)
-    ccall((:xkb_keymap_new_from_names, libxkb), Ptr{xkb_keymap}, (Ptr{xkb_context}, Ptr{xkb_rule_names}, xkb_keymap_compile_flags), context, names, flags)
+    ccall((:xkb_keymap_new_from_names, libxkbcommon), Ptr{xkb_keymap}, (Ptr{xkb_context}, Ptr{xkb_rule_names}, xkb_keymap_compile_flags), context, names, flags)
 end
 
 """
@@ -134,7 +134,7 @@ xkb_keymap
 A keymap compiled from the given XKB keymap file, or NULL if the compilation failed.
 """
 function xkb_keymap_new_from_file(context, file, format, flags)
-    ccall((:xkb_keymap_new_from_file, libxkb), Ptr{xkb_keymap}, (Ptr{xkb_context}, Ptr{Libc.FILE}, xkb_keymap_format, xkb_keymap_compile_flags), context, file, format, flags)
+    ccall((:xkb_keymap_new_from_file, libxkbcommon), Ptr{xkb_keymap}, (Ptr{xkb_context}, Ptr{Libc.FILE}, xkb_keymap_format, xkb_keymap_compile_flags), context, file, format, flags)
 end
 
 """
@@ -148,7 +148,7 @@ This is just like [`xkb_keymap_new_from_file`](@ref)(), but instead of a file, g
 [`xkb_keymap_new_from_file`](@ref)() xkb_keymap
 """
 function xkb_keymap_new_from_string(context, string, format, flags)
-    ccall((:xkb_keymap_new_from_string, libxkb), Ptr{xkb_keymap}, (Ptr{xkb_context}, Ptr{Cchar}, xkb_keymap_format, xkb_keymap_compile_flags), context, string, format, flags)
+    ccall((:xkb_keymap_new_from_string, libxkbcommon), Ptr{xkb_keymap}, (Ptr{xkb_context}, Ptr{Cchar}, xkb_keymap_format, xkb_keymap_compile_flags), context, string, format, flags)
 end
 
 """
@@ -169,7 +169,7 @@ xkb_keymap
 The keymap as a NUL-terminated string, or NULL if unsuccessful.
 """
 function xkb_keymap_get_as_string(keymap, format)
-    ccall((:xkb_keymap_get_as_string, libxkb), Ptr{Cchar}, (Ptr{xkb_keymap}, xkb_keymap_format), keymap, format)
+    ccall((:xkb_keymap_get_as_string, libxkbcommon), Ptr{Cchar}, (Ptr{xkb_keymap}, xkb_keymap_format), keymap, format)
 end
 
 """
@@ -183,7 +183,7 @@ xkb_keymap
 The passed in keymap.
 """
 function xkb_keymap_ref(keymap)
-    ccall((:xkb_keymap_ref, libxkb), Ptr{xkb_keymap}, (Ptr{xkb_keymap},), keymap)
+    ccall((:xkb_keymap_ref, libxkbcommon), Ptr{xkb_keymap}, (Ptr{xkb_keymap},), keymap)
 end
 
 """
@@ -197,7 +197,7 @@ xkb_keymap
 * `keymap`: The keymap. If it is NULL, this function does nothing.
 """
 function xkb_keymap_unref(keymap)
-    ccall((:xkb_keymap_unref, libxkb), Cvoid, (Ptr{xkb_keymap},), keymap)
+    ccall((:xkb_keymap_unref, libxkbcommon), Cvoid, (Ptr{xkb_keymap},), keymap)
 end
 
 """
@@ -225,7 +225,7 @@ Get the number of modifiers in the keymap.
 [`xkb_mod_index_t`](@ref) xkb_keymap
 """
 function xkb_keymap_num_mods(keymap)
-    ccall((:xkb_keymap_num_mods, libxkb), xkb_mod_index_t, (Ptr{xkb_keymap},), keymap)
+    ccall((:xkb_keymap_num_mods, libxkbcommon), xkb_mod_index_t, (Ptr{xkb_keymap},), keymap)
 end
 
 """
@@ -239,7 +239,7 @@ The name. If the index is invalid, returns NULL.
 [`xkb_mod_index_t`](@ref) xkb_keymap
 """
 function xkb_keymap_mod_get_name(keymap, idx)
-    ccall((:xkb_keymap_mod_get_name, libxkb), Ptr{Cchar}, (Ptr{xkb_keymap}, xkb_mod_index_t), keymap, idx)
+    ccall((:xkb_keymap_mod_get_name, libxkbcommon), Ptr{Cchar}, (Ptr{xkb_keymap}, xkb_mod_index_t), keymap, idx)
 end
 
 """
@@ -253,7 +253,7 @@ The index. If no modifier with this name exists, returns [`XKB_MOD_INVALID`](@re
 [`xkb_mod_index_t`](@ref) xkb_keymap
 """
 function xkb_keymap_mod_get_index(keymap, name)
-    ccall((:xkb_keymap_mod_get_index, libxkb), xkb_mod_index_t, (Ptr{xkb_keymap}, Ptr{Cchar}), keymap, name)
+    ccall((:xkb_keymap_mod_get_index, libxkbcommon), xkb_mod_index_t, (Ptr{xkb_keymap}, Ptr{Cchar}), keymap, name)
 end
 
 """
@@ -295,7 +295,7 @@ xkb_state
 \\since 0.4.1
 """
 function xkb_state_mod_index_is_consumed(state, key, idx)
-    ccall((:xkb_state_mod_index_is_consumed, libxkb), Cint, (Ptr{xkb_state}, xkb_keycode_t, xkb_mod_index_t), state, key, idx)
+    ccall((:xkb_state_mod_index_is_consumed, libxkbcommon), Cint, (Ptr{xkb_state}, xkb_keycode_t, xkb_mod_index_t), state, key, idx)
 end
 
 """
@@ -316,7 +316,7 @@ Takes the given modifier mask, and removes all modifiers which are consumed for 
 [`xkb_state_mod_index_is_consumed`](@ref)() xkb_state
 """
 function xkb_state_mod_mask_remove_consumed(state, key, mask)
-    ccall((:xkb_state_mod_mask_remove_consumed, libxkb), xkb_mod_mask_t, (Ptr{xkb_state}, xkb_keycode_t, xkb_mod_mask_t), state, key, mask)
+    ccall((:xkb_state_mod_mask_remove_consumed, libxkbcommon), xkb_mod_mask_t, (Ptr{xkb_state}, xkb_keycode_t, xkb_mod_mask_t), state, key, mask)
 end
 
 """
@@ -328,7 +328,7 @@ Get the number of layouts in the keymap.
 [`xkb_layout_index_t`](@ref) [`xkb_rule_names`](@ref) [`xkb_keymap_num_layouts_for_key`](@ref)() xkb_keymap
 """
 function xkb_keymap_num_layouts(keymap)
-    ccall((:xkb_keymap_num_layouts, libxkb), xkb_layout_index_t, (Ptr{xkb_keymap},), keymap)
+    ccall((:xkb_keymap_num_layouts, libxkbcommon), xkb_layout_index_t, (Ptr{xkb_keymap},), keymap)
 end
 
 """
@@ -342,7 +342,7 @@ This number can be different from [`xkb_keymap_num_layouts`](@ref)(), but is alw
 [`xkb_layout_index_t`](@ref) xkb_keymap
 """
 function xkb_keymap_num_layouts_for_key(keymap, key)
-    ccall((:xkb_keymap_num_layouts_for_key, libxkb), xkb_layout_index_t, (Ptr{xkb_keymap}, xkb_keycode_t), keymap, key)
+    ccall((:xkb_keymap_num_layouts_for_key, libxkbcommon), xkb_layout_index_t, (Ptr{xkb_keymap}, xkb_keycode_t), keymap, key)
 end
 
 """
@@ -356,7 +356,7 @@ The name. If the index is invalid, or the layout does not have a name, returns N
 [`xkb_layout_index_t`](@ref) For notes on layout names. xkb_keymap
 """
 function xkb_keymap_layout_get_name(keymap, idx)
-    ccall((:xkb_keymap_layout_get_name, libxkb), Ptr{Cchar}, (Ptr{xkb_keymap}, xkb_layout_index_t), keymap, idx)
+    ccall((:xkb_keymap_layout_get_name, libxkbcommon), Ptr{Cchar}, (Ptr{xkb_keymap}, xkb_layout_index_t), keymap, idx)
 end
 
 """
@@ -370,7 +370,7 @@ The index. If no layout exists with this name, returns [`XKB_LAYOUT_INVALID`](@r
 [`xkb_layout_index_t`](@ref) For notes on layout names. xkb_keymap
 """
 function xkb_keymap_layout_get_index(keymap, name)
-    ccall((:xkb_keymap_layout_get_index, libxkb), xkb_layout_index_t, (Ptr{xkb_keymap}, Ptr{Cchar}), keymap, name)
+    ccall((:xkb_keymap_layout_get_index, libxkbcommon), xkb_layout_index_t, (Ptr{xkb_keymap}, Ptr{Cchar}), keymap, name)
 end
 
 """
@@ -406,7 +406,7 @@ Get the number of LEDs in the keymap.
 [`xkb_led_index_t`](@ref) xkb_keymap
 """
 function xkb_keymap_num_leds(keymap)
-    ccall((:xkb_keymap_num_leds, libxkb), xkb_led_index_t, (Ptr{xkb_keymap},), keymap)
+    ccall((:xkb_keymap_num_leds, libxkbcommon), xkb_led_index_t, (Ptr{xkb_keymap},), keymap)
 end
 
 """
@@ -420,7 +420,7 @@ xkb_keymap
 The name. If the index is invalid, returns NULL.
 """
 function xkb_keymap_led_get_name(keymap, idx)
-    ccall((:xkb_keymap_led_get_name, libxkb), Ptr{Cchar}, (Ptr{xkb_keymap}, xkb_led_index_t), keymap, idx)
+    ccall((:xkb_keymap_led_get_name, libxkbcommon), Ptr{Cchar}, (Ptr{xkb_keymap}, xkb_led_index_t), keymap, idx)
 end
 
 """
@@ -434,7 +434,7 @@ xkb_keymap
 The index. If no LED with this name exists, returns [`XKB_LED_INVALID`](@ref).
 """
 function xkb_keymap_led_get_index(keymap, name)
-    ccall((:xkb_keymap_led_get_index, libxkb), xkb_led_index_t, (Ptr{xkb_keymap}, Ptr{Cchar}), keymap, name)
+    ccall((:xkb_keymap_led_get_index, libxkbcommon), xkb_led_index_t, (Ptr{xkb_keymap}, Ptr{Cchar}), keymap, name)
 end
 
 """
@@ -450,7 +450,7 @@ xkb_keymap
 1 if the key should repeat, 0 otherwise.
 """
 function xkb_keymap_key_repeats(keymap, key)
-    ccall((:xkb_keymap_key_repeats, libxkb), Cint, (Ptr{xkb_keymap}, xkb_keycode_t), keymap, key)
+    ccall((:xkb_keymap_key_repeats, libxkbcommon), Cint, (Ptr{xkb_keymap}, xkb_keycode_t), keymap, key)
 end
 
 """
@@ -491,7 +491,7 @@ xkb_state
 The number of keysyms in the syms\\_out array. If no keysyms are produced by the key in the given keyboard state, returns 0 and sets syms\\_out to NULL.
 """
 function xkb_state_key_get_syms(state, key, syms_out)
-    ccall((:xkb_state_key_get_syms, libxkb), Cint, (Ptr{xkb_state}, xkb_keycode_t, Ptr{Ptr{xkb_keysym_t}}), state, key, syms_out)
+    ccall((:xkb_state_key_get_syms, libxkbcommon), Cint, (Ptr{xkb_state}, xkb_keycode_t, Ptr{Ptr{xkb_keysym_t}}), state, key, syms_out)
 end
 
 """
@@ -538,7 +538,7 @@ If multiple layouts in the keymap have this name, the one with the lowest index 
 [`xkb_layout_index_t`](@ref) xkb_state
 """
 function xkb_state_layout_name_is_active(state, name, type)
-    ccall((:xkb_state_layout_name_is_active, libxkb), Cint, (Ptr{xkb_state}, Ptr{Cchar}, xkb_state_component), state, name, type)
+    ccall((:xkb_state_layout_name_is_active, libxkbcommon), Cint, (Ptr{xkb_state}, Ptr{Cchar}, xkb_state_component), state, name, type)
 end
 
 """
@@ -552,7 +552,7 @@ Test whether a layout is active in a given keyboard state by index.
 [`xkb_layout_index_t`](@ref) xkb_state
 """
 function xkb_state_layout_index_is_active(state, idx, type)
-    ccall((:xkb_state_layout_index_is_active, libxkb), Cint, (Ptr{xkb_state}, xkb_layout_index_t, xkb_state_component), state, idx, type)
+    ccall((:xkb_state_layout_index_is_active, libxkbcommon), Cint, (Ptr{xkb_state}, xkb_layout_index_t, xkb_state_component), state, idx, type)
 end
 
 """
@@ -571,7 +571,7 @@ xkb_state
 A layout index representing the given components of the layout state.
 """
 function xkb_state_serialize_layout(state, components)
-    ccall((:xkb_state_serialize_layout, libxkb), xkb_layout_index_t, (Ptr{xkb_state}, xkb_state_component), state, components)
+    ccall((:xkb_state_serialize_layout, libxkbcommon), xkb_layout_index_t, (Ptr{xkb_state}, xkb_state_component), state, components)
 end
 
 """
@@ -587,7 +587,7 @@ xkb_state
 The keymap which was passed to [`xkb_state_new`](@ref)() when creating this state object.
 """
 function xkb_state_get_keymap(state)
-    ccall((:xkb_state_get_keymap, libxkb), Ptr{xkb_keymap}, (Ptr{xkb_state},), state)
+    ccall((:xkb_state_get_keymap, libxkbcommon), Ptr{xkb_keymap}, (Ptr{xkb_state},), state)
 end
 
 """
@@ -627,7 +627,7 @@ The number of bytes in the name, excluding the NUL byte. If the keysym is invali
 [`xkb_keysym_t`](@ref)
 """
 function xkb_keysym_get_name(keysym, buffer, size)
-    ccall((:xkb_keysym_get_name, libxkb), Cint, (xkb_keysym_t, Ptr{Cchar}, Csize_t), keysym, buffer, size)
+    ccall((:xkb_keysym_get_name, libxkbcommon), Cint, (xkb_keysym_t, Ptr{Cchar}, Csize_t), keysym, buffer, size)
 end
 
 """
@@ -663,7 +663,7 @@ The keysym. If the name is invalid, returns [`XKB_KEY_NoSymbol`](@ref).
 [`xkb_keysym_t`](@ref)
 """
 function xkb_keysym_from_name(name, flags)
-    ccall((:xkb_keysym_from_name, libxkb), xkb_keysym_t, (Ptr{Cchar}, xkb_keysym_flags), name, flags)
+    ccall((:xkb_keysym_from_name, libxkbcommon), xkb_keysym_t, (Ptr{Cchar}, xkb_keysym_flags), name, flags)
 end
 
 """
@@ -683,7 +683,7 @@ The number of bytes written to the buffer (including the terminating byte). If t
 [`xkb_state_key_get_utf8`](@ref)()
 """
 function xkb_keysym_to_utf8(keysym, buffer, size)
-    ccall((:xkb_keysym_to_utf8, libxkb), Cint, (xkb_keysym_t, Ptr{Cchar}, Csize_t), keysym, buffer, size)
+    ccall((:xkb_keysym_to_utf8, libxkbcommon), Cint, (xkb_keysym_t, Ptr{Cchar}, Csize_t), keysym, buffer, size)
 end
 
 """
@@ -699,7 +699,7 @@ The Unicode/UTF-32 representation of keysym, which is also compatible with UCS-4
 [`xkb_state_key_get_utf32`](@ref)()
 """
 function xkb_keysym_to_utf32(keysym)
-    ccall((:xkb_keysym_to_utf32, libxkb), UInt32, (xkb_keysym_t,), keysym)
+    ccall((:xkb_keysym_to_utf32, libxkbcommon), UInt32, (xkb_keysym_t,), keysym)
 end
 
 """
@@ -721,7 +721,7 @@ The keysym corresponding to the specified Unicode codepoint, or [`XKB_KEY_NoSymb
 [`xkb_keysym_to_utf32`](@ref)()
 """
 function xkb_utf32_to_keysym(ucs)
-    ccall((:xkb_utf32_to_keysym, libxkb), xkb_keysym_t, (UInt32,), ucs)
+    ccall((:xkb_utf32_to_keysym, libxkbcommon), xkb_keysym_t, (UInt32,), ucs)
 end
 
 """
@@ -734,7 +734,7 @@ If there is no such form, the keysym is returned unchanged.
 The conversion rules may be incomplete; prefer to work with the Unicode representation instead, when possible.
 """
 function xkb_keysym_to_upper(ks)
-    ccall((:xkb_keysym_to_upper, libxkb), xkb_keysym_t, (xkb_keysym_t,), ks)
+    ccall((:xkb_keysym_to_upper, libxkbcommon), xkb_keysym_t, (xkb_keysym_t,), ks)
 end
 
 """
@@ -745,7 +745,7 @@ Convert a keysym to its lowercase form.
 The conversion rules may be incomplete; prefer to work with the Unicode representation instead, when possible.
 """
 function xkb_keysym_to_lower(ks)
-    ccall((:xkb_keysym_to_lower, libxkb), xkb_keysym_t, (xkb_keysym_t,), ks)
+    ccall((:xkb_keysym_to_lower, libxkbcommon), xkb_keysym_t, (xkb_keysym_t,), ks)
 end
 
 """
@@ -778,7 +778,7 @@ xkb_context
 A new context, or NULL on failure.
 """
 function xkb_context_new(flags)
-    ccall((:xkb_context_new, libxkb), Ptr{xkb_context}, (xkb_context_flags,), flags)
+    ccall((:xkb_context_new, libxkbcommon), Ptr{xkb_context}, (xkb_context_flags,), flags)
 end
 
 """
@@ -792,7 +792,7 @@ xkb_context
 The passed in context.
 """
 function xkb_context_ref(context)
-    ccall((:xkb_context_ref, libxkb), Ptr{xkb_context}, (Ptr{xkb_context},), context)
+    ccall((:xkb_context_ref, libxkbcommon), Ptr{xkb_context}, (Ptr{xkb_context},), context)
 end
 
 """
@@ -806,7 +806,7 @@ xkb_context
 * `context`: The context. If it is NULL, this function does nothing.
 """
 function xkb_context_unref(context)
-    ccall((:xkb_context_unref, libxkb), Cvoid, (Ptr{xkb_context},), context)
+    ccall((:xkb_context_unref, libxkbcommon), Cvoid, (Ptr{xkb_context},), context)
 end
 
 """
@@ -819,7 +819,7 @@ This may be useful in conjunction with [`xkb_context_set_log_fn`](@ref)() or oth
 xkb_context
 """
 function xkb_context_set_user_data(context, user_data)
-    ccall((:xkb_context_set_user_data, libxkb), Cvoid, (Ptr{xkb_context}, Ptr{Cvoid}), context, user_data)
+    ccall((:xkb_context_set_user_data, libxkbcommon), Cvoid, (Ptr{xkb_context}, Ptr{Cvoid}), context, user_data)
 end
 
 """
@@ -835,7 +835,7 @@ xkb_context
 The stored user data. If the user data wasn't set, or the passed in context is NULL, returns NULL.
 """
 function xkb_context_get_user_data(context)
-    ccall((:xkb_context_get_user_data, libxkb), Ptr{Cvoid}, (Ptr{xkb_context},), context)
+    ccall((:xkb_context_get_user_data, libxkbcommon), Ptr{Cvoid}, (Ptr{xkb_context},), context)
 end
 
 """
@@ -849,7 +849,7 @@ xkb_context
 1 on success, or 0 if the include path could not be added or is inaccessible.
 """
 function xkb_context_include_path_append(context, path)
-    ccall((:xkb_context_include_path_append, libxkb), Cint, (Ptr{xkb_context}, Ptr{Cchar}), context, path)
+    ccall((:xkb_context_include_path_append, libxkbcommon), Cint, (Ptr{xkb_context}, Ptr{Cchar}), context, path)
 end
 
 """
@@ -863,7 +863,7 @@ xkb_context
 1 on success, or 0 if the primary include path could not be added.
 """
 function xkb_context_include_path_append_default(context)
-    ccall((:xkb_context_include_path_append_default, libxkb), Cint, (Ptr{xkb_context},), context)
+    ccall((:xkb_context_include_path_append_default, libxkbcommon), Cint, (Ptr{xkb_context},), context)
 end
 
 """
@@ -879,7 +879,7 @@ xkb_context
 1 on success, or 0 if the primary include path could not be added.
 """
 function xkb_context_include_path_reset_defaults(context)
-    ccall((:xkb_context_include_path_reset_defaults, libxkb), Cint, (Ptr{xkb_context},), context)
+    ccall((:xkb_context_include_path_reset_defaults, libxkbcommon), Cint, (Ptr{xkb_context},), context)
 end
 
 """
@@ -890,7 +890,7 @@ Remove all entries from the context's include path.
 xkb_context
 """
 function xkb_context_include_path_clear(context)
-    ccall((:xkb_context_include_path_clear, libxkb), Cvoid, (Ptr{xkb_context},), context)
+    ccall((:xkb_context_include_path_clear, libxkbcommon), Cvoid, (Ptr{xkb_context},), context)
 end
 
 """
@@ -901,7 +901,7 @@ Get the number of paths in the context's include path.
 xkb_context
 """
 function xkb_context_num_include_paths(context)
-    ccall((:xkb_context_num_include_paths, libxkb), Cuint, (Ptr{xkb_context},), context)
+    ccall((:xkb_context_num_include_paths, libxkbcommon), Cuint, (Ptr{xkb_context},), context)
 end
 
 """
@@ -915,7 +915,7 @@ xkb_context
 The include path at the specified index. If the index is invalid, returns NULL.
 """
 function xkb_context_include_path_get(context, index)
-    ccall((:xkb_context_include_path_get, libxkb), Ptr{Cchar}, (Ptr{xkb_context}, Cuint), context, index)
+    ccall((:xkb_context_include_path_get, libxkbcommon), Ptr{Cchar}, (Ptr{xkb_context}, Cuint), context, index)
 end
 
 """
@@ -953,7 +953,7 @@ xkb_context
 * `level`: The logging level to use. Only messages from this level and below will be logged.
 """
 function xkb_context_set_log_level(context, level)
-    ccall((:xkb_context_set_log_level, libxkb), Cvoid, (Ptr{xkb_context}, xkb_log_level), context, level)
+    ccall((:xkb_context_set_log_level, libxkbcommon), Cvoid, (Ptr{xkb_context}, xkb_log_level), context, level)
 end
 
 """
@@ -964,7 +964,7 @@ Get the current logging level.
 xkb_context
 """
 function xkb_context_get_log_level(context)
-    ccall((:xkb_context_get_log_level, libxkb), xkb_log_level, (Ptr{xkb_context},), context)
+    ccall((:xkb_context_get_log_level, libxkbcommon), xkb_log_level, (Ptr{xkb_context},), context)
 end
 
 """
@@ -985,7 +985,7 @@ xkb_context
 * `verbosity`: The verbosity to use. Currently used values are 1 to 10, higher values being more verbose. 0 would result in no verbose messages being logged.
 """
 function xkb_context_set_log_verbosity(context, verbosity)
-    ccall((:xkb_context_set_log_verbosity, libxkb), Cvoid, (Ptr{xkb_context}, Cint), context, verbosity)
+    ccall((:xkb_context_set_log_verbosity, libxkbcommon), Cvoid, (Ptr{xkb_context}, Cint), context, verbosity)
 end
 
 """
@@ -996,7 +996,7 @@ Get the current logging verbosity of the context.
 xkb_context
 """
 function xkb_context_get_log_verbosity(context)
-    ccall((:xkb_context_get_log_verbosity, libxkb), Cint, (Ptr{xkb_context},), context)
+    ccall((:xkb_context_get_log_verbosity, libxkbcommon), Cint, (Ptr{xkb_context},), context)
 end
 
 """
@@ -1015,7 +1015,7 @@ xkb_context
 * `log_fn`: The function that will be called for logging messages. Passing NULL restores the default function, which logs to stderr.
 """
 function xkb_context_set_log_fn(context, log_fn)
-    ccall((:xkb_context_set_log_fn, libxkb), Cvoid, (Ptr{xkb_context}, Ptr{Cvoid}), context, log_fn)
+    ccall((:xkb_context_set_log_fn, libxkbcommon), Cvoid, (Ptr{xkb_context}, Ptr{Cvoid}), context, log_fn)
 end
 
 """
@@ -1031,7 +1031,7 @@ This is just like [`xkb_keymap_new_from_string`](@ref)(), but takes a length arg
 [`xkb_keymap_new_from_string`](@ref)() xkb_keymap
 """
 function xkb_keymap_new_from_buffer(context, buffer, length, format, flags)
-    ccall((:xkb_keymap_new_from_buffer, libxkb), Ptr{xkb_keymap}, (Ptr{xkb_context}, Ptr{Cchar}, Csize_t, xkb_keymap_format, xkb_keymap_compile_flags), context, buffer, length, format, flags)
+    ccall((:xkb_keymap_new_from_buffer, libxkbcommon), Ptr{xkb_keymap}, (Ptr{xkb_context}, Ptr{Cchar}, Csize_t, xkb_keymap_format, xkb_keymap_compile_flags), context, buffer, length, format, flags)
 end
 
 """
@@ -1045,7 +1045,7 @@ Get the minimum keycode in the keymap.
 [`xkb_keycode_t`](@ref) xkb_keymap
 """
 function xkb_keymap_min_keycode(keymap)
-    ccall((:xkb_keymap_min_keycode, libxkb), xkb_keycode_t, (Ptr{xkb_keymap},), keymap)
+    ccall((:xkb_keymap_min_keycode, libxkbcommon), xkb_keycode_t, (Ptr{xkb_keymap},), keymap)
 end
 
 """
@@ -1059,7 +1059,7 @@ Get the maximum keycode in the keymap.
 [`xkb_keycode_t`](@ref) xkb_keymap
 """
 function xkb_keymap_max_keycode(keymap)
-    ccall((:xkb_keymap_max_keycode, libxkb), xkb_keycode_t, (Ptr{xkb_keymap},), keymap)
+    ccall((:xkb_keymap_max_keycode, libxkbcommon), xkb_keycode_t, (Ptr{xkb_keymap},), keymap)
 end
 
 # typedef void ( * xkb_keymap_key_iter_t ) ( struct xkb_keymap * keymap , xkb_keycode_t key , void * data )
@@ -1084,7 +1084,7 @@ Run a specified function for every valid keycode in the keymap. If a keymap is s
 [`xkb_keymap_min_keycode`](@ref)() [`xkb_keymap_max_keycode`](@ref)() [`xkb_keycode_t`](@ref) xkb_keymap
 """
 function xkb_keymap_key_for_each(keymap, iter, data)
-    ccall((:xkb_keymap_key_for_each, libxkb), Cvoid, (Ptr{xkb_keymap}, xkb_keymap_key_iter_t, Ptr{Cvoid}), keymap, iter, data)
+    ccall((:xkb_keymap_key_for_each, libxkbcommon), Cvoid, (Ptr{xkb_keymap}, xkb_keymap_key_iter_t, Ptr{Cvoid}), keymap, iter, data)
 end
 
 """
@@ -1102,7 +1102,7 @@ The key name. If no key with this keycode exists, returns NULL.
 [`xkb_keycode_t`](@ref) xkb_keymap
 """
 function xkb_keymap_key_get_name(keymap, key)
-    ccall((:xkb_keymap_key_get_name, libxkb), Ptr{Cchar}, (Ptr{xkb_keymap}, xkb_keycode_t), keymap, key)
+    ccall((:xkb_keymap_key_get_name, libxkbcommon), Ptr{Cchar}, (Ptr{xkb_keymap}, xkb_keycode_t), keymap, key)
 end
 
 """
@@ -1120,7 +1120,7 @@ The keycode. If no key with this name exists, returns [`XKB_KEYCODE_INVALID`](@r
 [`xkb_keycode_t`](@ref) xkb_keymap
 """
 function xkb_keymap_key_by_name(keymap, name)
-    ccall((:xkb_keymap_key_by_name, libxkb), xkb_keycode_t, (Ptr{xkb_keymap}, Ptr{Cchar}), keymap, name)
+    ccall((:xkb_keymap_key_by_name, libxkbcommon), xkb_keycode_t, (Ptr{xkb_keymap}, Ptr{Cchar}), keymap, name)
 end
 
 """
@@ -1134,7 +1134,7 @@ If `layout` is out of range for this key (that is, larger or equal to the value 
 [`xkb_level_index_t`](@ref) xkb_keymap
 """
 function xkb_keymap_num_levels_for_key(keymap, key, layout)
-    ccall((:xkb_keymap_num_levels_for_key, libxkb), xkb_level_index_t, (Ptr{xkb_keymap}, xkb_keycode_t, xkb_layout_index_t), keymap, key, layout)
+    ccall((:xkb_keymap_num_levels_for_key, libxkbcommon), xkb_level_index_t, (Ptr{xkb_keymap}, xkb_keycode_t, xkb_layout_index_t), keymap, key, layout)
 end
 
 """
@@ -1169,7 +1169,7 @@ The number of modifier masks stored in the masks\\_out array. If the key is not 
 [`xkb_level_index_t`](@ref), [`xkb_mod_mask_t`](@ref) xkb_keymap
 """
 function xkb_keymap_key_get_mods_for_level(keymap, key, layout, level, masks_out, masks_size)
-    ccall((:xkb_keymap_key_get_mods_for_level, libxkb), Csize_t, (Ptr{xkb_keymap}, xkb_keycode_t, xkb_layout_index_t, xkb_level_index_t, Ptr{xkb_mod_mask_t}, Csize_t), keymap, key, layout, level, masks_out, masks_size)
+    ccall((:xkb_keymap_key_get_mods_for_level, libxkbcommon), Csize_t, (Ptr{xkb_keymap}, xkb_keycode_t, xkb_layout_index_t, xkb_level_index_t, Ptr{xkb_mod_mask_t}, Csize_t), keymap, key, layout, level, masks_out, masks_size)
 end
 
 """
@@ -1197,7 +1197,7 @@ The number of keysyms in the syms\\_out array. If no keysyms are produced by the
 [`xkb_state_key_get_syms`](@ref)() xkb_keymap
 """
 function xkb_keymap_key_get_syms_by_level(keymap, key, layout, level, syms_out)
-    ccall((:xkb_keymap_key_get_syms_by_level, libxkb), Cint, (Ptr{xkb_keymap}, xkb_keycode_t, xkb_layout_index_t, xkb_level_index_t, Ptr{Ptr{xkb_keysym_t}}), keymap, key, layout, level, syms_out)
+    ccall((:xkb_keymap_key_get_syms_by_level, libxkbcommon), Cint, (Ptr{xkb_keymap}, xkb_keycode_t, xkb_layout_index_t, xkb_level_index_t, Ptr{Ptr{xkb_keysym_t}}), keymap, key, layout, level, syms_out)
 end
 
 """
@@ -1213,7 +1213,7 @@ xkb_state
 A new keyboard state object, or NULL on failure.
 """
 function xkb_state_new(keymap)
-    ccall((:xkb_state_new, libxkb), Ptr{xkb_state}, (Ptr{xkb_keymap},), keymap)
+    ccall((:xkb_state_new, libxkbcommon), Ptr{xkb_state}, (Ptr{xkb_keymap},), keymap)
 end
 
 """
@@ -1227,7 +1227,7 @@ xkb_state
 The passed in object.
 """
 function xkb_state_ref(state)
-    ccall((:xkb_state_ref, libxkb), Ptr{xkb_state}, (Ptr{xkb_state},), state)
+    ccall((:xkb_state_ref, libxkbcommon), Ptr{xkb_state}, (Ptr{xkb_state},), state)
 end
 
 """
@@ -1241,7 +1241,7 @@ xkb_state
 * `state`: The state. If it is NULL, this function does nothing.
 """
 function xkb_state_unref(state)
-    ccall((:xkb_state_unref, libxkb), Cvoid, (Ptr{xkb_state},), state)
+    ccall((:xkb_state_unref, libxkbcommon), Cvoid, (Ptr{xkb_state},), state)
 end
 
 """
@@ -1278,7 +1278,7 @@ A mask of state components that have changed as a result of the update. If nothi
 [`xkb_state_update_mask`](@ref)()
 """
 function xkb_state_update_key(state, key, direction)
-    ccall((:xkb_state_update_key, libxkb), xkb_state_component, (Ptr{xkb_state}, xkb_keycode_t, xkb_key_direction), state, key, direction)
+    ccall((:xkb_state_update_key, libxkbcommon), xkb_state_component, (Ptr{xkb_state}, xkb_keycode_t, xkb_key_direction), state, key, direction)
 end
 
 """
@@ -1302,7 +1302,7 @@ A mask of state components that have changed as a result of the update. If nothi
 [`xkb_state_component`](@ref), [`xkb_state_update_key`](@ref)
 """
 function xkb_state_update_mask(state, depressed_mods, latched_mods, locked_mods, depressed_layout, latched_layout, locked_layout)
-    ccall((:xkb_state_update_mask, libxkb), xkb_state_component, (Ptr{xkb_state}, xkb_mod_mask_t, xkb_mod_mask_t, xkb_mod_mask_t, xkb_layout_index_t, xkb_layout_index_t, xkb_layout_index_t), state, depressed_mods, latched_mods, locked_mods, depressed_layout, latched_layout, locked_layout)
+    ccall((:xkb_state_update_mask, libxkbcommon), xkb_state_component, (Ptr{xkb_state}, xkb_mod_mask_t, xkb_mod_mask_t, xkb_mod_mask_t, xkb_layout_index_t, xkb_layout_index_t, xkb_layout_index_t), state, depressed_mods, latched_mods, locked_mods, depressed_layout, latched_layout, locked_layout)
 end
 
 """
@@ -1331,7 +1331,7 @@ xkb_state
 The number of bytes required for the string, excluding the NUL byte. If there is nothing to write, returns 0.
 """
 function xkb_state_key_get_utf8(state, key, buffer, size)
-    ccall((:xkb_state_key_get_utf8, libxkb), Cint, (Ptr{xkb_state}, xkb_keycode_t, Ptr{Cchar}, Csize_t), state, key, buffer, size)
+    ccall((:xkb_state_key_get_utf8, libxkbcommon), Cint, (Ptr{xkb_state}, xkb_keycode_t, Ptr{Cchar}, Csize_t), state, key, buffer, size)
 end
 
 """
@@ -1349,7 +1349,7 @@ xkb_state
 The UTF-32 representation for the key, if it consists of only a single codepoint. Otherwise, returns 0.
 """
 function xkb_state_key_get_utf32(state, key)
-    ccall((:xkb_state_key_get_utf32, libxkb), UInt32, (Ptr{xkb_state}, xkb_keycode_t), state, key)
+    ccall((:xkb_state_key_get_utf32, libxkbcommon), UInt32, (Ptr{xkb_state}, xkb_keycode_t), state, key)
 end
 
 """
@@ -1367,7 +1367,7 @@ The keysym. If the key does not have exactly one keysym, returns [`XKB_KEY_NoSym
 [`xkb_state_key_get_syms`](@ref)() xkb_state
 """
 function xkb_state_key_get_one_sym(state, key)
-    ccall((:xkb_state_key_get_one_sym, libxkb), xkb_keysym_t, (Ptr{xkb_state}, xkb_keycode_t), state, key)
+    ccall((:xkb_state_key_get_one_sym, libxkbcommon), xkb_keysym_t, (Ptr{xkb_state}, xkb_keycode_t), state, key)
 end
 
 """
@@ -1387,7 +1387,7 @@ xkb_state
 The layout index for the key in the given keyboard state. If the given keycode is invalid, or if the key is not included in any layout at all, returns [`XKB_LAYOUT_INVALID`](@ref).
 """
 function xkb_state_key_get_layout(state, key)
-    ccall((:xkb_state_key_get_layout, libxkb), xkb_layout_index_t, (Ptr{xkb_state}, xkb_keycode_t), state, key)
+    ccall((:xkb_state_key_get_layout, libxkbcommon), xkb_layout_index_t, (Ptr{xkb_state}, xkb_keycode_t), state, key)
 end
 
 """
@@ -1421,7 +1421,7 @@ xkb_state
 The shift level index. If the key or layout are invalid, returns [`XKB_LEVEL_INVALID`](@ref).
 """
 function xkb_state_key_get_level(state, key, layout)
-    ccall((:xkb_state_key_get_level, libxkb), xkb_level_index_t, (Ptr{xkb_state}, xkb_keycode_t, xkb_layout_index_t), state, key, layout)
+    ccall((:xkb_state_key_get_level, libxkbcommon), xkb_level_index_t, (Ptr{xkb_state}, xkb_keycode_t, xkb_layout_index_t), state, key, layout)
 end
 
 """
@@ -1457,7 +1457,7 @@ xkb_state
 A [`xkb_mod_mask_t`](@ref) representing the given components of the modifier state.
 """
 function xkb_state_serialize_mods(state, components)
-    ccall((:xkb_state_serialize_mods, libxkb), xkb_mod_mask_t, (Ptr{xkb_state}, xkb_state_component), state, components)
+    ccall((:xkb_state_serialize_mods, libxkbcommon), xkb_mod_mask_t, (Ptr{xkb_state}, xkb_state_component), state, components)
 end
 
 """
@@ -1471,7 +1471,7 @@ xkb_state
 1 if the modifier is active, 0 if it is not. If the modifier name does not exist in the keymap, returns -1.
 """
 function xkb_state_mod_name_is_active(state, name, type)
-    ccall((:xkb_state_mod_name_is_active, libxkb), Cint, (Ptr{xkb_state}, Ptr{Cchar}, xkb_state_component), state, name, type)
+    ccall((:xkb_state_mod_name_is_active, libxkbcommon), Cint, (Ptr{xkb_state}, Ptr{Cchar}, xkb_state_component), state, name, type)
 end
 
 """
@@ -1485,7 +1485,7 @@ xkb_state
 1 if the modifier is active, 0 if it is not. If the modifier index is invalid in the keymap, returns -1.
 """
 function xkb_state_mod_index_is_active(state, idx, type)
-    ccall((:xkb_state_mod_index_is_active, libxkb), Cint, (Ptr{xkb_state}, xkb_mod_index_t, xkb_state_component), state, idx, type)
+    ccall((:xkb_state_mod_index_is_active, libxkbcommon), Cint, (Ptr{xkb_state}, xkb_mod_index_t, xkb_state_component), state, idx, type)
 end
 
 """
@@ -1524,7 +1524,7 @@ xkb_state
 a mask of the consumed modifiers.
 """
 function xkb_state_key_get_consumed_mods2(state, key, mode)
-    ccall((:xkb_state_key_get_consumed_mods2, libxkb), xkb_mod_mask_t, (Ptr{xkb_state}, xkb_keycode_t, xkb_consumed_mode), state, key, mode)
+    ccall((:xkb_state_key_get_consumed_mods2, libxkbcommon), xkb_mod_mask_t, (Ptr{xkb_state}, xkb_keycode_t, xkb_consumed_mode), state, key, mode)
 end
 
 """
@@ -1537,7 +1537,7 @@ xkb_state
 \\since 0.4.1
 """
 function xkb_state_key_get_consumed_mods(state, key)
-    ccall((:xkb_state_key_get_consumed_mods, libxkb), xkb_mod_mask_t, (Ptr{xkb_state}, xkb_keycode_t), state, key)
+    ccall((:xkb_state_key_get_consumed_mods, libxkbcommon), xkb_mod_mask_t, (Ptr{xkb_state}, xkb_keycode_t), state, key)
 end
 
 """
@@ -1558,7 +1558,7 @@ Test whether a modifier is consumed by keyboard state translation for a key.
 [`xkb_state_mod_mask_remove_consumed`](@ref)(), [`xkb_state_key_get_consumed_mods`](@ref)() xkb_state
 """
 function xkb_state_mod_index_is_consumed2(state, key, idx, mode)
-    ccall((:xkb_state_mod_index_is_consumed2, libxkb), Cint, (Ptr{xkb_state}, xkb_keycode_t, xkb_mod_index_t, xkb_consumed_mode), state, key, idx, mode)
+    ccall((:xkb_state_mod_index_is_consumed2, libxkbcommon), Cint, (Ptr{xkb_state}, xkb_keycode_t, xkb_mod_index_t, xkb_consumed_mode), state, key, idx, mode)
 end
 
 """
@@ -1572,7 +1572,7 @@ Test whether a LED is active in a given keyboard state by name.
 [`xkb_led_index_t`](@ref) xkb_state
 """
 function xkb_state_led_name_is_active(state, name)
-    ccall((:xkb_state_led_name_is_active, libxkb), Cint, (Ptr{xkb_state}, Ptr{Cchar}), state, name)
+    ccall((:xkb_state_led_name_is_active, libxkbcommon), Cint, (Ptr{xkb_state}, Ptr{Cchar}), state, name)
 end
 
 """
@@ -1586,7 +1586,7 @@ Test whether a LED is active in a given keyboard state by index.
 [`xkb_led_index_t`](@ref) xkb_state
 """
 function xkb_state_led_index_is_active(state, idx)
-    ccall((:xkb_state_led_index_is_active, libxkb), Cint, (Ptr{xkb_state}, xkb_led_index_t), state, idx)
+    ccall((:xkb_state_led_index_is_active, libxkbcommon), Cint, (Ptr{xkb_state}, xkb_led_index_t), state, idx)
 end
 
 """
@@ -1603,19 +1603,19 @@ Flags for the [`xkb_x11_setup_xkb_extension`](@ref)() function.
 end
 
 function xkb_x11_setup_xkb_extension(connection, major_xkb_version, minor_xkb_version, flags, major_xkb_version_out, minor_xkb_version_out, base_event_out, base_error_out)
-    ccall((:xkb_x11_setup_xkb_extension, libxkb), Cint, (Ptr{Cint}, UInt16, UInt16, xkb_x11_setup_xkb_extension_flags, Ptr{UInt16}, Ptr{UInt16}, Ptr{UInt8}, Ptr{UInt8}), connection, major_xkb_version, minor_xkb_version, flags, major_xkb_version_out, minor_xkb_version_out, base_event_out, base_error_out)
+    ccall((:xkb_x11_setup_xkb_extension, libxkbcommon - x11), Cint, (Ptr{Cint}, UInt16, UInt16, xkb_x11_setup_xkb_extension_flags, Ptr{UInt16}, Ptr{UInt16}, Ptr{UInt8}, Ptr{UInt8}), connection, major_xkb_version, minor_xkb_version, flags, major_xkb_version_out, minor_xkb_version_out, base_event_out, base_error_out)
 end
 
 function xkb_x11_get_core_keyboard_device_id(connection)
-    ccall((:xkb_x11_get_core_keyboard_device_id, libxkb), Int32, (Ptr{Cint},), connection)
+    ccall((:xkb_x11_get_core_keyboard_device_id, libxkbcommon - x11), Int32, (Ptr{Cint},), connection)
 end
 
 function xkb_x11_keymap_new_from_device(context, connection, device_id, flags)
-    ccall((:xkb_x11_keymap_new_from_device, libxkb), Ptr{xkb_keymap}, (Ptr{xkb_context}, Ptr{Cint}, Int32, xkb_keymap_compile_flags), context, connection, device_id, flags)
+    ccall((:xkb_x11_keymap_new_from_device, libxkbcommon - x11), Ptr{xkb_keymap}, (Ptr{xkb_context}, Ptr{Cint}, Int32, xkb_keymap_compile_flags), context, connection, device_id, flags)
 end
 
 function xkb_x11_state_new_from_device(keymap, connection, device_id)
-    ccall((:xkb_x11_state_new_from_device, libxkb), Ptr{xkb_state}, (Ptr{xkb_keymap}, Ptr{Cint}, Int32), keymap, connection, device_id)
+    ccall((:xkb_x11_state_new_from_device, libxkbcommon - x11), Ptr{xkb_state}, (Ptr{xkb_keymap}, Ptr{Cint}, Int32), keymap, connection, device_id)
 end
 
 const XKB_MOD_NAME_SHIFT = "Shift"

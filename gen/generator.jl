@@ -36,6 +36,10 @@ for target in JLLEnvs.JLL_ENV_TRIPLES
         "codegen" => codegen,
         )
     general["library_name"] = "libxkb"
+    general["library_names"] = Dict(
+        "xkbcommon.h" => "libxkbcommon",
+        "xkbcommon-x11.h" => "libxkbcommon-x11",
+    )
     general["output_file_path"] = joinpath(dirname(@__DIR__), "lib", "$target.jl")
     general["use_deterministic_symbol"] = true
     general["use_julia_native_enum_type"] = true
