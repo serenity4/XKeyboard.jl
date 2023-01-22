@@ -35,7 +35,7 @@ jobs:
       - name: Run tests with xvfb
         run: |
           sudo apt-get install xvfb
-          /usr/bin/xvfb-run -n99 julia --project=. -e 'using Pkg; Pkg.test()'
+          /usr/bin/xvfb-run -n99 julia --project=. -e 'using Pkg; Pkg.test(coverage = true)'
       - uses: julia-actions/julia-processcoverage@v1
       - uses: codecov/codecov-action@v2
         with:
