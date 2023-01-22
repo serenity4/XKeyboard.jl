@@ -124,30 +124,50 @@ struct Keysym
   code::UInt32
 end
 
+"""
+    Keysym(keymap::Keymap, key::PhysicalKey)
+
+Obtain the [`Keysym`](@ref) corresponding to the pressed `key` given a `keymap` state.
+"""
 Keysym(km::Keymap, key::PhysicalKey) = Keysym(xkb_state_key_get_one_sym(km.state, key.code))
+"""
+    Keysym(str::AbstractString)
+
+Get the [`Keysym`](@ref) represented by the string `str`.
+"""
 Keysym(str::AbstractString) = Keysym(xkb_keysym_from_name(str, XKB_KEYSYM_NO_FLAGS))
+"""
+    Keysym(name::Symbol)
+
+Get the [`Keysym`](@ref) named `name`. Equivalent to `Keysym(string(name))`.
+"""
 Keysym(name::Symbol) = Keysym(string(name))
 
 """
-    String(keysym::Keysym; max_chars = 50)
+    String(keysym::Keysym)
 
-Return a `String` representation of a [`Keysym`](@ref) with at most `max_chars` characters.
-
-The size of the string is not known when querying XKB,
-so `max_chars` are reserved (50 by default) and the result will be truncated if not enough characters were reserved.
+Return a `String` representation of a [`Keysym`](@ref).
 """
-function Base.String(keysym::Keysym; max_chars = 50) # TODO: see if we can query the number of strings with a null pointer.
-  char_tmp = zeros(Cchar, max_chars + 1) # reserve `max_chars` characters + 1 NUL byte.
-  char_tmp_ptr = pointer(char_tmp)
-  GC.@preserve char_tmp begin
-    val = xkb_keysym_get_name(keysym.code, pointer(char_tmp), sizeof(eltype(char_tmp)) * length(char_tmp))
-    val == -1 && @error("Failed to obtain a keysym string for $(repr(keysym.code))")
-    str = unsafe_string(char_tmp_ptr)
+function Base.String(keysym::Keysym) # TODO: see if we can query the number of strings with a null pointer.
+  size = xkb_keysym_get_name(keysym.code, C_NULL, 0)
+  if size == -1
+    @error "Failed to obtain a keysym string for $(repr(keysym.code))"
+    size = 50 # make sure we get enough chars to hold whatever string is used as placeholder
   end
-  str
+  cchars = zeros(Cchar, size + 1)
+  cchars_ptr = pointer(cchars)
+  GC.@preserve cchars begin
+    val = xkb_keysym_get_name(keysym.code, cchars_ptr, size + 1)
+    unsafe_string(cchars_ptr)
+  end
 end
 
-Base.Symbol(keysym::Keysym; max_chars = 50) = Symbol(String(keysym; max_chars))
+"""
+    Symbol(keysym::Keysym)
+
+Return the name of a [`Keysym`](@ref). Equivalent to `Symbol(String(keysym))`.
+"""
+Base.Symbol(keysym::Keysym) = Symbol(String(keysym))
 
 """
     Char(keymap::Keymap, key::PhysicalKey)
