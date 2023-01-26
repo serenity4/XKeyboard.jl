@@ -37,7 +37,7 @@ for target in JLLEnvs.JLL_ENV_TRIPLES
     options = Dict{String,Any}(
         "general" => general,
         "codegen" => codegen,
-        )
+    )
     general["library_name"] = "libxkb"
     general["library_names"] = Dict(
         "xkbcommon.h" => "libxkbcommon",

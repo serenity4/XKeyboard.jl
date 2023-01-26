@@ -8,6 +8,7 @@ include("LibXKB.jl")
 include("keymap.jl")
 
 export Keymap,
+  create_context,
   keymap_from_x11,
   PhysicalKey,
   Keysym,

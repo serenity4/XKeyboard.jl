@@ -31,14 +31,19 @@ function keymap_from_x11(conn; setup_xkb = true)
     ret_code = xkb_x11_setup_xkb_extension(conn, 1, 0, XKB_X11_SETUP_XKB_EXTENSION_NO_FLAGS, C_NULL, C_NULL, C_NULL, C_NULL)
     ret_code == 0 && error("XKB extension setup failed")
   end
-  ctx = xkb_context_new(XKB_CONTEXT_NO_DEFAULT_INCLUDES)
-  ctx == C_NULL && error("Context creation failed")
+  ctx = create_context()
   device_id = xkb_x11_get_core_keyboard_device_id(conn)
   device_id == -1 && error("No keyboard device ID could be retrieved")
   keymap = xkb_x11_keymap_new_from_device(ctx, conn, device_id, XKB_KEYMAP_COMPILE_NO_FLAGS)
   state = xkb_x11_state_new_from_device(keymap, conn, device_id)
   state == C_NULL && error("State creation failed")
   Keymap(keymap, ctx, state)
+end
+
+function create_context()
+  ctx = xkb_context_new(XKB_CONTEXT_NO_DEFAULT_INCLUDES)
+  ctx == C_NULL && error("Context creation failed")
+  ctx
 end
 
 """
