@@ -181,16 +181,7 @@ Retrieve a UTF-8 character which corresponds to the printable input associated w
 
 If no printable input is defined for this keysym, the NUL character `'\\0'` is returned which, when printed, is a no-op.
 """
-function Base.Char(km::Keymap, key::PhysicalKey)
-  codepoints = zeros(UInt8, 5) # reserve 4 bytes + 1 NUL byte
-  size = xkb_state_key_get_utf8(km.state, key.code, C_NULL, 0)
-  @assert size ≤ 4 "More than 4 bytes appear to be required to represent the character from $key in UTF-8; `Char`s can only hold 4 bytes of data, which suggests an error or unexpected behavior from XKB or the wrapping logic."
-  GC.@preserve codepoints begin
-    ptr = pointer(codepoints)
-    xkb_state_key_get_utf8(km.state, key.code, ptr, 5)
-    Char(reinterpret(UInt32, @view codepoints[1:4])[])
-  end
-end
+Base.Char(km::Keymap, key::PhysicalKey) = Char(xkb_state_key_get_utf32(km.state, key.code))
 
 function print_key_info(io::IO, km::Keymap, key::PhysicalKey)
   key_name = String(km, key)
