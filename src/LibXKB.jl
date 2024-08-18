@@ -1,7 +1,10 @@
 module LibXKB
 
 using BitMasks: @bitmask
-using xkbcommon_jll: libxkbcommon, libxkbcommon_x11
+using xkbcommon_jll: xkbcommon_jll
+@static if xkbcommon_jll.is_available()
+  using xkbcommon_jll: libxkbcommon, libxkbcommon_x11
+end
 
 const IS_LIBC_MUSL = occursin("musl", Base.BUILD_TRIPLET)
 
