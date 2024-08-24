@@ -190,4 +190,8 @@ function print_key_info(io::IO, km::Keymap, key::PhysicalKey)
   print_key_info(io, key_name, key.code, input, keysym_name)
 end
 
-print_key_info(io::IO, key_name::AbstractString, keycode::Integer, input::Char, keysym_name::AbstractString) = print(io, "Key \e[31m$key_name\e[m (code \e[33m$(keycode)\e[m): input \"\e[36m$input\e[m\" from symbol \e[36m$keysym_name\e[m")
+function print_key_info(io::IO, key_name::AbstractString, keycode::Integer, input::Char, keysym_name::AbstractString)
+  char = repr(input)
+  str = replace(string(input), '\r' => '↵')
+  print(io, "Key \e[31m$key_name\e[m (code \e[33m$(keycode)\e[m): input \"\e[32m$str\e[m\" (char: \e[36m$char\e[m) from symbol \e[34m$keysym_name\e[m")
+end
