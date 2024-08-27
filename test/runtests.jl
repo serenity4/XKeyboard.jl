@@ -2,6 +2,8 @@ using XKeyboard
 using Xorg_libxcb_jll: libxcb
 using Test
 
+# These tests must be run with an English QWERTY keyboard layout to pass.
+
 @testset "XKeyboard.jl" begin
   @testset "Presence of common wrapper & X11 extension" begin
     @test in(:xkb_keymap_new_from_file, names(XKeyboard)) && isdefined(XKeyboard, :xkb_keymap_new_from_file)
@@ -44,11 +46,11 @@ using Test
 
   rshift = PhysicalKey(km, :RTSH)
   xkb_state_update_key(km.state, rshift.code, XKB_KEY_DOWN)
-  test_keysym(:AD01, :A)
-  test_keysym(:AE05, Symbol(5))
+  test_keysym(:AD01, :Q)
+  test_keysym(:AE05, :percent)
   xkb_state_update_key(km.state, rshift.code, XKB_KEY_UP)
-  test_keysym(:AD01, :a)
-  test_keysym(:AE05, :parenleft)
+  test_keysym(:AD01, :q)
+  test_keysym(:AE05, Symbol(5))
   test_keysym(:RTSH, :Shift_R)
   test_keysym(:LALT, :Alt_L)
 
