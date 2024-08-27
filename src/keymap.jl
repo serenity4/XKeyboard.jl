@@ -133,6 +133,10 @@ Keysyms are not physical keys, nor input characters.
 """
 struct Keysym
   code::UInt32
+  function Keysym(code)
+    iszero(code) && error("Null code not allowed in Keysym")
+    new(code)
+  end
 end
 
 """
@@ -146,7 +150,11 @@ Keysym(km::Keymap, key::PhysicalKey) = Keysym(xkb_state_key_get_one_sym(km.state
 
 Get the [`Keysym`](@ref) represented by the string `str`.
 """
-Keysym(str::AbstractString) = Keysym(xkb_keysym_from_name(str, XKB_KEYSYM_NO_FLAGS))
+function Keysym(str::AbstractString)
+  code = xkb_keysym_from_name(str, XKB_KEYSYM_NO_FLAGS)
+  iszero(code) && error("No keysym matches the name $(repr(str))")
+  Keysym(code)
+end
 """
     Keysym(name::Symbol)
 
@@ -156,7 +164,9 @@ Keysym(name::Symbol) = Keysym(string(name))
 
 function Keysym(char::Char)
   str = 'U' * @view repr(UInt16(char))[end - 3:end]
-  Keysym(str)
+  code = xkb_keysym_from_name(str, XKB_KEYSYM_NO_FLAGS)
+  iszero(code) && error("No keysym corresponds to the character $(repr(char))")
+  Keysym(code)
 end
 
 """

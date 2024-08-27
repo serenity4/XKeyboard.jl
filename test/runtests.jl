@@ -10,20 +10,27 @@ using Test
     @test in(:xkb_x11_keymap_new_from_device, names(XKeyboard)) && isdefined(XKeyboard, :xkb_x11_keymap_new_from_device)
   end
 
-  @testset "Keysym <-> Char" begin
-    @test Char(Keysym(:A)) == 'A'
-    @test Char(Keysym(:underscore)) == '_'
-    @test Char(Keysym(:U0EC6)) == 'ໆ'
-    @test Char(Keysym(:ampersand)) == '&'
-    @test Char(Keysym(:KP_5)) == '5'
-    @test Char(Keysym(:Shift_R)) == '\0'
+  @testset "Keysym" begin
+    @testset "Keysym from name" begin
+      @test isa(Keysym(:A), Keysym)
+      @test isa(Keysym(:ampersand), Keysym)
+      @test_throws "No keysym matches the name" Keysym(:thisdoesnotexist)
+    end
+    @testset "Keysym <-> Char" begin
+      @test Char(Keysym(:A)) == 'A'
+      @test Char(Keysym(:underscore)) == '_'
+      @test Char(Keysym(:U0EC6)) == 'ໆ'
+      @test Char(Keysym(:ampersand)) == '&'
+      @test Char(Keysym(:KP_5)) == '5'
+      @test Char(Keysym(:Shift_R)) == '\0'
 
-    @test Keysym('A') == Keysym(:A)
-    @test Keysym('_') == Keysym(:underscore)
-    @test Keysym('ໆ') == Keysym(:U0EC6)
-    @test Keysym('&') == Keysym(:ampersand)
-    @test Keysym('5') == Keysym(Symbol(5))
-    @test Keysym('\0') == Keysym(0)
+      @test Keysym('A') == Keysym(:A)
+      @test Keysym('_') == Keysym(:underscore)
+      @test Keysym('ໆ') == Keysym(:U0EC6)
+      @test Keysym('&') == Keysym(:ampersand)
+      @test Keysym('5') == Keysym(Symbol(5))
+      @test_throws "No keysym corresponds to the character" Keysym('\u0001')
+    end
   end
 
   conn = @ccall libxcb.xcb_connect(get(ENV, "DISPLAY", C_NULL)::Cstring, C_NULL::Ptr{Cint})::Ptr{Cvoid}
@@ -44,7 +51,7 @@ using Test
   test_keysym(:a)
   test_keysym(:A)
   test_keysym(:Shift_R)
-  @test Symbol(Keysym(:foo)) == :NoSymbol
+  @eval @test Symbol($(Expr(:new, :Keysym, UInt32(0)))) == :NoSymbol
   name = @test_logs (:error, r"Failed to obtain a keysym string") Symbol(Keysym(typemax(UInt32)))
   @test name == :Invalid
 
