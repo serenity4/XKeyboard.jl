@@ -119,7 +119,7 @@ then the letter would be `a` (AZERTY layout), or `A`. if we had pressed the left
 we would not even have a printable character associated with the keystroke.
 
 `q`, `Q`, `a`, `A`, `left_shift` and `right_shift` are all semantic symbols, need not be printable (e.g. shifts)
-and their mapping from a physical key -if one exists- depends some external state, tracked inside a [`Keymap`](@ref).
+and their mapping from a physical key -if one exists- depends on some external state, tracked inside a [`Keymap`](@ref).
 Just like physical keys, these symbols are represented with an integer code, and have a more friendly string representation
 that one can obtain with `String(keysym::Keysym)`.
 
