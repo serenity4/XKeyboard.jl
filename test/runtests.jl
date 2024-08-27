@@ -10,13 +10,20 @@ using Test
     @test in(:xkb_x11_keymap_new_from_device, names(XKeyboard)) && isdefined(XKeyboard, :xkb_x11_keymap_new_from_device)
   end
 
-  @testset "Keysym to Char" begin
+  @testset "Keysym <-> Char" begin
     @test Char(Keysym(:A)) == 'A'
     @test Char(Keysym(:underscore)) == '_'
     @test Char(Keysym(:U0EC6)) == 'ໆ'
     @test Char(Keysym(:ampersand)) == '&'
     @test Char(Keysym(:KP_5)) == '5'
     @test Char(Keysym(:Shift_R)) == '\0'
+
+    @test Keysym('A') == Keysym(:A)
+    @test Keysym('_') == Keysym(:underscore)
+    @test Keysym('ໆ') == Keysym(:U0EC6)
+    @test Keysym('&') == Keysym(:ampersand)
+    @test Keysym('5') == Keysym(Symbol(5))
+    @test Keysym('\0') == Keysym(0)
   end
 
   conn = @ccall libxcb.xcb_connect(get(ENV, "DISPLAY", C_NULL)::Cstring, C_NULL::Ptr{Cint})::Ptr{Cvoid}

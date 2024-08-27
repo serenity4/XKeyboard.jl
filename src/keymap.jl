@@ -154,6 +154,11 @@ Get the [`Keysym`](@ref) named `name`. Equivalent to `Keysym(string(name))`.
 """
 Keysym(name::Symbol) = Keysym(string(name))
 
+function Keysym(char::Char)
+  str = 'U' * @view repr(UInt16(char))[end - 3:end]
+  Keysym(str)
+end
+
 """
     String(keysym::Keysym)
 
