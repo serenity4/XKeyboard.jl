@@ -8,10 +8,20 @@ using Test
     @test in(:xkb_x11_keymap_new_from_device, names(XKeyboard)) && isdefined(XKeyboard, :xkb_x11_keymap_new_from_device)
   end
 
+  @testset "Keysym to Char" begin
+    @test Char(Keysym(:A)) == 'A'
+    @test Char(Keysym(:underscore)) == '_'
+    @test Char(Keysym(:U0EC6)) == 'ໆ'
+    @test Char(Keysym(:ampersand)) == '&'
+    @test Char(Keysym(:KP_5)) == '5'
+    @test Char(Keysym(:Shift_R)) == '\0'
+  end
+
   conn = @ccall libxcb.xcb_connect(get(ENV, "DISPLAY", C_NULL)::Cstring, C_NULL::Ptr{Cint})::Ptr{Cvoid}
   code = @ccall libxcb.xcb_connection_has_error(conn::Ptr{Cvoid})::Cint
   @assert iszero(code) "XCB connection not successful (error code: $code)"
   @test conn ≠ C_NULL
+  # Beware: the modifiers pressed during execution of this code will be encoded into the keymap state.
   km = keymap_from_x11(conn)
   @test all(≠(C_NULL), (km.handle, km.ctx, km.state))
 
@@ -28,6 +38,19 @@ using Test
   @test Symbol(Keysym(:foo)) == :NoSymbol
   name = @test_logs (:error, r"Failed to obtain a keysym string") Symbol(Keysym(typemax(UInt32)))
   @test name == :Invalid
+
+  test_keysym(key::PhysicalKey, name) = @test Symbol(Keysym(km, key)) == name
+  test_keysym(key, name) = test_keysym(PhysicalKey(km, key), name)
+
+  rshift = PhysicalKey(km, :RTSH)
+  xkb_state_update_key(km.state, rshift.code, XKB_KEY_DOWN)
+  test_keysym(:AD01, :A)
+  test_keysym(:AE05, Symbol(5))
+  xkb_state_update_key(km.state, rshift.code, XKB_KEY_UP)
+  test_keysym(:AD01, :a)
+  test_keysym(:AE05, :parenleft)
+  test_keysym(:RTSH, :Shift_R)
+  test_keysym(:LALT, :Alt_L)
 
   print("\nPrinting a few keys:")
   for key in [:AD01, :AD02, :RTSH, :LALT, :RALT, :LCTL, :TAB, :AE01, :ESC, :KP5]
