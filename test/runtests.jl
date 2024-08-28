@@ -11,6 +11,17 @@ using Test
   end
 
   @testset "Keysym" begin
+    @testset "Legacy codes" begin
+      # Not legacy.
+      @test Keysym(0x69).code === 0x00000069
+      # Not legacy.
+      @test Keysym(0x01000e55).code === 0x01000e55
+      # Legacy.
+      @test Keysym(0x0dea).code === 0x01000e4a
+      # Legacy.
+      @test Keysym(0x20ac).code === 0x010020ac
+    end
+
     @testset "Keysym from name" begin
       @test isa(Keysym(:A), Keysym)
       @test isa(Keysym(:ampersand), Keysym)

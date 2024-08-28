@@ -135,7 +135,7 @@ struct Keysym
   code::UInt32
   function Keysym(code)
     iszero(code) && error("Null code not allowed in Keysym")
-    new(code)
+    new(get(legacy_codes, code, code))
   end
 end
 
@@ -162,11 +162,13 @@ Get the [`Keysym`](@ref) named `name`. Equivalent to `Keysym(string(name))`.
 """
 Keysym(name::Symbol) = Keysym(string(name))
 
+const UNICODE_BIT = 0x01000000
+
 function Keysym(char::Char)
-  str = 'U' * @view repr(UInt16(char))[end - 3:end]
-  code = xkb_keysym_from_name(str, XKB_KEYSYM_NO_FLAGS)
-  iszero(code) && error("No keysym corresponds to the character $(repr(char))")
-  Keysym(code)
+  code = codepoint(char)
+  code < 0x20 && error("No keysym corresponds to the character $(repr(char))")
+  code ≤ 0xff && return Keysym(code)
+  Keysym(UNICODE_BIT | code)
 end
 
 """

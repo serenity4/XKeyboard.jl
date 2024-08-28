@@ -5,6 +5,7 @@ using Reexport
 include("LibXKB.jl")
 @reexport using .LibXKB
 
+include("legacy.jl")
 include("keymap.jl")
 
 export Keymap,
